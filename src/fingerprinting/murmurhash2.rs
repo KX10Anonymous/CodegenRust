@@ -1,5 +1,6 @@
 // source taken from: https://docs.rs/crate/murmurhash32/0.2.0/source/src/murmurhash2.rs
 use byteorder::{ByteOrder, LittleEndian};
+
 const M: u32 = 0x5bd1_e995;
 const SEED: u32 = 0x9ea5fa36;
 
