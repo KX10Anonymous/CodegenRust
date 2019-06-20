@@ -17,5 +17,8 @@ fn main() {
     let test_data_vector = test_data::get_test_data("test_data").expect("Cannot read test data");
     assert_eq!(test_data_vector.len(), 6948);
 
-    // TODO : compare result to test_data
+    // compare result to test_data
+    for i in 0..result.codes.len() {
+        assert_eq!(result.codes[i], test_data_vector[i]);
+    }
 }
