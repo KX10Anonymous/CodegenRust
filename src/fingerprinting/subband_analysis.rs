@@ -4,15 +4,17 @@ use std::f32::consts::PI;
 pub fn compute(samples: &[f32]) -> Matrix<f32>
 {
     let mut z = [0.0; C_LEN];
-    let mut y = [0.0; M_COLS_SIZE];
-    let mut mr: Matrix<f32> = Matrix::new(M_ROWS_SIZE, M_COLS_SIZE);
-    let mut mi: Matrix<f32> = Matrix::new(M_ROWS_SIZE, M_COLS_SIZE);
+    let mut y = [0.0; M_COLS];
+    let mut mr: Matrix<f32> = Matrix::new(M_ROWS, M_COLS);
+    let mut mi: Matrix<f32> = Matrix::new(M_ROWS, M_COLS);
 
     for i in 0..M_ROWS {
         for j in 0..M_COLS {
-            let temp = ((2 * i + 1) * (j - 4)) as f32 * (PI / 16.0);
-            mr.set(i, j, temp.cos());
-            mi.set(i, j, temp.sin());
+            let i_signed = i as i32;
+            let j_signed = j as i32;
+            let temp = ((2 * i_signed + 1) * (j_signed - 4)) as f32 * (PI / 16.0);
+            mr[[i, j]] = temp.cos();
+            mi[[i, j]] = temp.sin();
         }
     }
 
@@ -28,13 +30,13 @@ pub fn compute(samples: &[f32]) -> Matrix<f32>
             z[i] = samples[t * SUBBANDS + i] * C[i];
         }
 
-        for i in 0..M_COLS_SIZE {
+        for i in 0..M_COLS {
             y[i] = z[i];
         }
 
-        for i in 0..M_COLS_SIZE {
-            for j in 1..M_ROWS_SIZE {
-                y[i] = y[i] + z[i + M_COLS_SIZE * j];
+        for i in 0..M_COLS {
+            for j in 1..M_ROWS {
+                y[i] = y[i] + z[i + M_COLS * j];
             }
         }
 
@@ -43,10 +45,10 @@ pub fn compute(samples: &[f32]) -> Matrix<f32>
             let mut di = 0.0;
 
             for j in 0..M_COLS {
-                dr = dr + mr.get(i, j) * y[j as usize];
-                di = di - mi.get(i, j) * y[j as usize];
+                dr = dr + mr[[i, j]] * y[j];
+                di = di - mi[[i, j]] * y[j];
             }
-            data.set(i, t as i32, dr.powi(2) + di.powi(2));
+            data[[i, t]] = dr.powi(2) + di.powi(2);
         }
     }
 
@@ -55,10 +57,8 @@ pub fn compute(samples: &[f32]) -> Matrix<f32>
 
 const C_LEN: usize = 128;
 const SUBBANDS: usize = 8;
-const M_ROWS: i32 = 8;
-const M_COLS: i32 = 16;
-const M_ROWS_SIZE: usize = M_ROWS as usize;
-const M_COLS_SIZE: usize = M_COLS as usize;
+const M_ROWS: usize = 8;
+const M_COLS: usize = 16;
 
 const C: [f32;C_LEN] = [
     0.000000477,  0.000000954,  0.000001431,  0.000002384,  0.000003815,  0.000006199,  0.000009060,  0.000013828,

@@ -1,3 +1,6 @@
+use std::ops::Index;
+use std::ops::IndexMut;
+
 pub struct Matrix<T> 
 {
     array: Vec<T>,
@@ -17,13 +20,24 @@ impl<T> Matrix<T> where T: Default + Clone {
     pub fn get_array(&self) -> &[T] {
         &self.array
     }
+}
 
-    pub fn get(&self, row: i32, col: i32) -> &T {
+impl<T> Index<[usize; 2]> for Matrix<T>
+{
+    type Output = T;
 
-        &self.array[row as usize * self.cols + col as usize]
+    fn index(&self, index: [usize; 2]) -> &Self::Output {
+        let row = index[0];
+        let col = index[1];
+        &self.array[row * self.cols + col]
     }
+}
 
-    pub fn set(&mut self, row: i32, col: i32, value: T) {
-        self.array[row as usize * self.cols + col as usize] = value;
+impl<T> IndexMut<[usize; 2]> for Matrix<T>
+{
+    fn index_mut(&mut self, index: [usize; 2]) -> &mut Self::Output {
+        let row = index[0];
+        let col = index[1];
+        &mut self.array[row * self.cols + col]
     }
 }
