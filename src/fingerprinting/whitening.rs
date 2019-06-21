@@ -29,10 +29,8 @@ pub fn compute(samples: &[f32]) -> Vec<f32>
 
 fn compute_block(start: usize, block_size: usize, samples: &[f32], r: &mut [f32], xo: &mut [f32], ai: &mut [f32], whitened: &mut Vec<f32>)
 {
-    let mut ki: f32;
-
     // calculate autocorrelation of current block
-    for i in 0..P {
+    for i in 0..=P {
         let mut acc = 0.0;
         for j in i..block_size {
             acc = acc + samples[j + start] * samples[j - i + start];
@@ -44,6 +42,7 @@ fn compute_block(start: usize, block_size: usize, samples: &[f32], r: &mut [f32]
     // calculate new filter coefficients
     // Durbin's recursion, per p. 411 of Rabiner & Schafer 1978
     let mut e = r[0];
+    let mut ki: f32;
     for i in 1..=P {
         let mut sum_alpha_r = 0.0;
         for j in 1..i {

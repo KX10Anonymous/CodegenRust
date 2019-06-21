@@ -11,7 +11,7 @@ pub struct Matrix<T>
 impl<T> Matrix<T> where T: Default + Clone {
     pub fn new(rows: usize, cols: usize) -> Self {
         Matrix::<T> {
-            array: vec![T::default();rows * cols], // TODO : try performance without default values set
+            array: vec![T::default();rows * cols],
             rows: rows,
             cols: cols,
         }

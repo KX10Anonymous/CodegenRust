@@ -6,8 +6,8 @@ use byteorder::{LittleEndian, ReadBytesExt};
 pub fn get_samples<P>(path: P) -> io::Result<Vec<f32>>
     where P : AsRef<Path>
 {
-    let file_size = fs::metadata(&path)?.len() as usize;
     let file = fs::File::open(&path)?;
+    let file_size = file.metadata()?.len() as usize;
     let mut buffered_reader = io::BufReader::new(file);
 
     let mut samples = Vec::with_capacity(file_size / 2);
