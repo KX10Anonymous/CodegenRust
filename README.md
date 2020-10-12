@@ -1,4 +1,4 @@
-This is port of [echprint-codegen](https://github.com/spotify/echoprint-codegen) in Rust.
+This is port of [echoprint-codegen](https://github.com/spotify/echoprint-codegen) in Rust.
 
 This is not exact port, a lot of changes were made in the process:
 - Code is thoroughly refactored for readability purposes
