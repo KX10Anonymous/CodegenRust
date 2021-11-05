@@ -10,7 +10,7 @@ use std::mem;
 
 pub fn compute(matrix: Matrix<f32>, offset: i32) -> Fingerprint
 {
-    let mut hash_material = [0_u8; 5];
+    let mut hash_material = [0_u8; 6];
     let mut onset_counter_for_band = [0; SUBBANDS];
     let mut p: Matrix<i32> = Matrix::new(2, 6);
     let (out_matrix, onset_count) = adaptive_onsets(&mut onset_counter_for_band, matrix);
